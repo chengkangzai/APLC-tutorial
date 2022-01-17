@@ -18,17 +18,6 @@ class Order {
     private String status;
     private LocalDateTime transactionDateTime;
 
-    // Constructor
-    public Order(String[] items, LocalDateTime orderTime, double paymentAmount, String email, String deliveryAddress, String status, LocalDateTime transactionDateTime) {
-        this.items = items;
-        this.orderTime = orderTime;
-        this.paymentAmount = paymentAmount;
-        this.email = email;
-        this.deliveryAddress = deliveryAddress;
-        this.status = status;
-        this.transactionDateTime = transactionDateTime;
-    }
-
     public Order() {
 
     }
@@ -57,16 +46,8 @@ class Order {
         this.paymentAmount = paymentAmount;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getDeliveryAddress() {
-        return deliveryAddress;
     }
 
     public void setDeliveryAddress(String deliveryAddress) {
@@ -79,10 +60,6 @@ class Order {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public LocalDateTime getTransactionDateTime() {
-        return transactionDateTime;
     }
 
     public void setTransactionDateTime(LocalDateTime transactionDateTime) {
@@ -121,13 +98,16 @@ public class Main {
         record.add("[1,1,2,3]|2019-05-21T16:53:05.870|300.00|myemail@apu.edu.my|Tmn Raya, Serdang|incomplete|2019-05-22T15:43:05.870");
         record.add("[1,3,3,3]|2019-05-22T17:30:05.870|400.00|youremail@apu.edu.my|Unit 101, Tmn Connaught, Cheras|incomplete|2019-05-23T15:43:05.870");
 
+        //----------------------------------------------------------------------------------------------------------------------
+        //Transform the data into a list of lines
 
         List<Septet> lines = record
                 .stream()
                 .map(rec -> Septet.fromCollection(Arrays.asList(rec.split("\\|"))))
                 .collect(Collectors.toCollection(ArrayList::new));
 
-        //Create an Order class for all data items above
+        //----------------------------------------------------------------------------------------------------------------------
+        //Transform list of lines into a list of orders
         List<Order> orders = lines
                 .stream()
                 .map(item -> {
@@ -138,6 +118,7 @@ public class Main {
                     order.setEmail(item.getValue3().toString());
                     order.setDeliveryAddress(item.getValue4().toString());
                     order.setStatus(item.getValue5().toString());
+                    order.setTransactionDateTime(LocalDateTime.parse(item.getValue6().toString()));
                     return order;
                 })
                 .toList();
@@ -145,7 +126,8 @@ public class Main {
         System.out.println("2. Printing all orders that store as Order Object");
         orders.forEach(System.out::println);
 
-        //Calculate the total amount of all orders
+        //----------------------------------------------------------------------------------------------------------------------
+        //Calculate the total amount of orders
         double totalAmount = orders
                 .stream()
                 .mapToDouble(Order::getPaymentAmount)
@@ -155,7 +137,8 @@ public class Main {
         System.out.println("3. Printing the total amount of all orders");
         System.out.println("Total amount: " + totalAmount);
 
-//        List ORDERITEM, ORDERDATETIME, PAYMENTAMT, and STATUS using tuples.
+        //----------------------------------------------------------------------------------------------------------------------
+        //Get only ORDERITEM, ORDERDATETIME, PAYMENTAMT, and STATUS from the list of orders
         List<Quartet<String, LocalDateTime, Double, String>> orderItems = orders
                 .stream()
                 .map(order -> Quartet.with(Arrays.toString(order.getItems()), order.getOrderTime(), order.getPaymentAmount(), order.getStatus()))
@@ -166,7 +149,8 @@ public class Main {
         orderItems.forEach(System.out::println);
 
 
-
+        //----------------------------------------------------------------------------------------------------------------------
+        //Printing the order items
         List<String> totalOrderItems = orders
                 .stream()
                 .map(order -> Arrays.toString(order.getItems()))
