@@ -7,7 +7,7 @@ import java.util.stream.IntStream;
 
 public class Q2 {
 
-    BiFunction<Integer, ArrayList<Integer>, Integer> compute = (x, y) -> List.copyOf(y).stream().mapToInt(Integer::intValue).sum() * x;
+    BiFunction<Integer, List<Integer>, Integer> compute = (x, y) -> y.stream().mapToInt(Integer::intValue).sum() * x;
 
     public static void main(String[] args) {
         int[] arr = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
@@ -15,7 +15,7 @@ public class Q2 {
         System.out.println(a); // 55
 
         //This is the same as above, but using the functional interface or lambda expression
-        int b = new Q2().compute.apply(1, new ArrayList<>(List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)));
+        int b = new Q2().compute.apply(1, List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
         System.out.println(b); // 55
     }
 }
