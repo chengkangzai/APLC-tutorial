@@ -2,7 +2,7 @@ package com.company;
 
 import java.util.function.BiFunction;
 
-public class Q1 {
+public class Q3 {
     BiFunction<String, String, String> join2 = (s1, s2) -> String.join(" ", s1, s2);
 
     public static void run() {
@@ -10,7 +10,7 @@ public class Q1 {
         System.out.println(joiner.apply("Hello", "World"));
 
         //or this, using BiFunction
-        Q1 q1 = new Q1();
+        Q3 q1 = new Q3();
         System.out.println(q1.join2.apply("Hello", " World"));
     }
 
